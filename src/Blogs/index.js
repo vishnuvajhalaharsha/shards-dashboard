@@ -21,18 +21,22 @@ const useStyles = makeStyles({
     display: "flex",
   },
   sideImg: {
-   height:"100%"
+    height: "100%",
   },
   cardFooter: {
     padding: 10,
   },
 });
 
-export const Blogs = () => {
+export const Blogs = (props) => {
   const [firstRowData, setFirstRowData] = useState([]);
+
   useEffect(() => {
-    setFirstRowData(firstRow);
-  }, []);
+    if(props.overViewData){
+      setFirstRowData(props.overViewData);
+    }
+  
+  }, [props.overViewData]);
 
   const getSecondRow = (cards) => {
     return (
@@ -51,15 +55,7 @@ export const Blogs = () => {
             >
               <Card>
                 <Grid container className={classes.details}>
-                  <Grid
-                    item
-                    xs={6}
-                    sm
-                    md={4}
-                    lg={4}
-                    xl
-              
-                  >
+                  <Grid item xs={6} sm md={4} lg={4} xl>
                     <CardMedia
                       className={classes.sideImg}
                       image={d?.img}
@@ -96,7 +92,6 @@ export const Blogs = () => {
                         </>
                       }
                     />
-                 
                   </Grid>
                   <Grid item xs={6} sm md={8} lg={8} xl>
                     <CardContent>
@@ -206,30 +201,38 @@ export const Blogs = () => {
                         title="Contemplative Reptile"
                         children={
                           rowType === "first" && (
-                              <>
-                            <div
-                              style={{
-                                display: "flex",
-                                justifyContent: "flex-end",
-                                padding: "10px",
-                                height:"85%"
-                              }}
-                            >
-                              <Chip
+                            <>
+                              <div
                                 style={{
-                                  backgroundColor: c.color,
-                                  color: "white",
+                                  display: "flex",
+                                  justifyContent: "flex-end",
+                                  padding: "10px",
+                                  height: "85%",
                                 }}
-                                size="small"
-                                label={c.chipType}
-                              />
-                            </div>
-                          <div style={{position:"absolute", marginLeft:"20px"}}>  <Avatar src={c.img}/></div>
+                              >
+                                <Chip
+                                  style={{
+                                    backgroundColor: c.color,
+                                    color: "white",
+                                  }}
+                                  size="small"
+                                  label={c.chipType}
+                                />
+                              </div>
+                              <div
+                                style={{
+                                  position: "absolute",
+                                  marginLeft: "20px",
+                                }}
+                              >
+                                {" "}
+                                <Avatar src={c.img} />
+                              </div>
                             </>
                           )
                         }
                       />
-                    
+
                       <CardContent>
                         <Typography gutterBottom variant="h5" component="h2">
                           {c.title}

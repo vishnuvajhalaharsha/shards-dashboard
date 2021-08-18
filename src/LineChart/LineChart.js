@@ -85,9 +85,8 @@ export const LineChart = () => {
             variant="outlined"
             id="date"
             size="small"
-            label="Start Date"
+            placeholder="Start Date"
             type="date"
-            defaultValue="2017-05-24"
             className={classes.textField}
             InputLabelProps={{
               shrink: true,
@@ -97,9 +96,8 @@ export const LineChart = () => {
             variant="outlined"
             size="small"
             id="date"
-            label="End Date"
+            placeholder="End Date"
             type="date"
-            defaultValue="2017-05-24"
             className={classes.textField}
             InputLabelProps={{
               shrink: true,

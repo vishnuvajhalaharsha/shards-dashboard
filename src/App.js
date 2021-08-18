@@ -20,7 +20,7 @@ import {
   Avatar,
   Divider,
   Menu,
-  MenuItem
+  MenuItem,
 } from "@material-ui/core";
 import ViewListIcon from "@material-ui/icons/ViewList";
 import CreateSharpIcon from "@material-ui/icons/CreateSharp";
@@ -38,6 +38,7 @@ import Blogs from "./Blogs";
 import { firstRow } from "./Blogs/config";
 import { HeaderFlexers } from "./sparkChartStyle";
 import SelectDropDown from "./PieChart/FormControl";
+import axios from "axios";
 const Header = getHeader(styled);
 const DrawerSidebar = getDrawerSidebar(styled);
 const SidebarTrigger = getSidebarTrigger(styled);
@@ -108,6 +109,8 @@ scheme.configureEdgeSidebar((builder) => {
 const App = () => {
   const [sparkChart, setSparkChart] = useState([]);
   const [list, setList] = useState(0);
+  const [userValue, setUserValue] = useState("");
+  const [overViewData, setOverviewData] = useState({});
   const classes = styles();
   const [anchorEl, setAnchorEl] = useState(null);
   const open = Boolean(anchorEl);
@@ -119,12 +122,29 @@ const App = () => {
   const handleClose = () => {
     setAnchorEl(null);
   };
+  const getOverview = async (value) => {
+    const result = await axios.get(`http://localhost:8000/overview/${value}`);
+    if (result && result.data) {
+      setOverviewData(result.data);
+      setSparkChart(result.data?.summary);
+    }
+  };
   useEffect(() => {
-    setSparkChart(sparkChartData);
+    if (userValue) {
+      getOverview(userValue);
+    }
+  }, [userValue]);
+
+  useEffect(() => {
+    setUserValue("611a43ef4b643da58801114c");
   }, []);
 
   const handleClick = (event, num) => {
     setList(num);
+  };
+
+  const handleDropDownClick = (e) => {
+    setUserValue(e.target.value);
   };
 
   return (
@@ -149,32 +169,64 @@ const App = () => {
                 }}
               />
             </Grid>
-            <Grid item xs={2} sm={2} md={1} lg={1} xl>
+            <Grid
+              container
+              justifyContent="center"
+              alignItems="center"
+              xs={2}
+              sm={2}
+              md={1}
+              lg={1}
+              xl
+            >
               <HeaderFlexers>
                 <NotificationsNoneSharpIcon />
               </HeaderFlexers>
             </Grid>
-            <Grid item xs={2} sm={2} md={1} lg={1} xl>
+            <Grid
+              container
+              justifyContent="center"
+              alignItems="center"
+              xs={2}
+              sm={2}
+              md={1}
+              lg={1}
+              xl
+            >
               {" "}
               <HeaderFlexers>
-              <Avatar style={{cursor:"pointer"}} src={firstRow[0].avgImg} onClick={handleMenuClick} />
+                <Avatar
+                  style={{ cursor: "pointer" }}
+                  src={firstRow[0].avgImg}
+                  onClick={handleMenuClick}
+                />
                 <Menu
                   id="fade-menu"
                   anchorEl={anchorEl}
                   keepMounted
                   open={open}
                   onClose={handleClose}
-            
                 >
                   <MenuItem onClick={handleClose}>Profile</MenuItem>
                   <MenuItem onClick={handleClose}>My account</MenuItem>
                   <MenuItem onClick={handleClose}>Logout</MenuItem>
                 </Menu>
-             
               </HeaderFlexers>
             </Grid>
-            <Grid item xs={2} sm={2} md={1} lg={1} xl>
-              <SelectDropDown />
+            <Grid
+              container
+              justifyContent="center"
+              alignItems="center"
+              xs={2}
+              sm={2}
+              md={1}
+              lg={1}
+              xl
+            >
+              <SelectDropDown
+                handleClick={handleDropDownClick}
+                userValue={userValue}
+              />
             </Grid>
           </Grid>
         </Toolbar>
@@ -278,7 +330,7 @@ const App = () => {
             </Grid>
           </>
         )}
-        {list === 1 && <Blogs />}
+        {list === 1 && <Blogs overViewData={overViewData?.blogs} />}
       </Content>
       <Footer>Footer</Footer>
     </Root>

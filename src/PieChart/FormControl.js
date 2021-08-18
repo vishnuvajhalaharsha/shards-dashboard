@@ -48,18 +48,19 @@ const BootstrapInput = withStyles((theme) => ({
 }))(InputBase);
 
 export const SelectDropDown = (props) => {
+
   return (
     <FormControl >
       <NativeSelect
         id="demo-customized-select-native"
-        value={10}
-        onChange={() => {}}
+        value={props.userValue}
+        onChange={(e) => props.handleClick(e)}
         input={<BootstrapInput />}
       >
         <option aria-label="None" value="" />
-        <option value={10}>Ten</option>
-        <option value={20}>Twenty</option>
-        <option value={30}>Thirty</option>
+        <option value={"611a43ef4b643da58801114c"}>User 1</option>
+        <option value={"611b8295366d595bac69f916"}>User 2</option>
+      
       </NativeSelect>
     </FormControl>
   );
